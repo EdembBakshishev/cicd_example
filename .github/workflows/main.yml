@@ -36,8 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Deploy with Docker Compose
-        run: docker compose up -d
+    - name: Build Docker image (for compose)
+      run: docker build -t my-backend-image .
+
+    - name: Deploy with Docker Compose
+      run: docker compose up -d
+
