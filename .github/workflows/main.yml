@@ -1,11 +1,7 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # Это позволяет запускать workflow вручную
+  workflow_dispatch:  # Оставляем только ручной запуск
 
 jobs:
   build:
