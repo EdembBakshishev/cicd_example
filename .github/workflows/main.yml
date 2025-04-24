@@ -1,19 +1,43 @@
-stages:
-  - build
-  - test
-  - deploy
+name: CI Pipeline
 
-build-job:
-  stage: build
-  script:
-    - docker build -t my-backend-image .
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-test-job:
-  stage: test
-  script:
-    - docker run --rm my-backend-image pytest -s -v
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-deploy-job:
-  stage: deploy
-  script:
-    - docker compose up -d
+      - name: Build Docker image
+        run: docker build -t my-backend-image .
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image (again, for test)
+        run: docker build -t my-backend-image .
+
+      - name: Run Pytest
+        run: docker run --rm my-backend-image pytest -s -v
+
+  deploy:
+    name: Deploy with Docker Compose
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy with Docker Compose
+        run: docker compose up -d
