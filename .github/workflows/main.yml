@@ -1,7 +1,7 @@
 name: CI Pipeline
 
 on:
-  workflow_dispatch:  # Запуск по кнопке
+  workflow_dispatch:  # hand run
 
 jobs:
   build:
